@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                          ">
+
+    <import resource="jdbc.xml"></import>
+
+    <bean id="user" class="domain.User"></bean>
+    <bean id="userDao" class="dao.impl.UserDaoImpl"></bean>
+
+    <bean id="userService" class="service.impl.UserServiceImpl" p:userDao-ref="userDao">
+        <!--<constructor-arg name="userDao" ref="userDao"></constructor-arg>-->
+        <property name="list">
+            <list>
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </property>
+        <property name="userList">
+            <list>
+                <!--<value></value>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="myaspect" class="aop.MyAspect"></bean>
+
+    <!--配置织入-->
+    <aop:config>
+        <aop:aspect ref="myaspect">
+            <!--切点表达式 ： 类型 包.类.方法(参数)-->
+            <aop:pointcut id="be" expression="execution(* service.impl.*.*(..))"></aop:pointcut>
+            <!--before 前置增强-->
+            <aop:before method="outBefore" pointcut-ref="be"></aop:before>
+        </aop:aspect>
+    </aop:config>
+
+
+    <!--平台事务管理器-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--事务-->
+    <tx:advice id="interceptor" transaction-manager="dataSourceTransactionManager">
+        <!--针对各个业务方法，设置事务的属性信息-->
+        <tx:attributes>
+            <!--方法名、*、方法名*-->
+            <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED" timeout="-1" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--事务 配置织入-->
+    <aop:config>
+        <!--事务专用-->
+        <aop:advisor advice-ref="interceptor" pointcut="execution(* service.impl.*.*(..))"></aop:advisor>
+    </aop:config>
+
+<tx:annotation-driven transaction-manager="dataSourceTransactionManager"></tx:annotation-driven>
+</beans>

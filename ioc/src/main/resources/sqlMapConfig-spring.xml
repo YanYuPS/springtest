@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!--注意标签顺序-->
+    <!--起别名-->
+    <typeAliases>
+        <typeAlias type="domain.User" alias="user"></typeAlias>
+    </typeAliases>
+
+
+    <!--&lt;!&ndash;分页助手&ndash;&gt;-->
+    <!--<plugins>-->
+        <!--&lt;!&ndash;分页助手&ndash;&gt;-->
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
+            <!--&lt;!&ndash;指定方言&ndash;&gt;-->
+            <!--<property name="dialect" value="mysql"></property>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+
+
+
+
+
+
+
+
+
+
+</configuration>

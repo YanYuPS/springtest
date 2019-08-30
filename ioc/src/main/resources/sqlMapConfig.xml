@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="jdbc.properties"></properties>
+
+
+    <!--注意标签顺序-->
+    <!--起别名-->
+    <typeAliases>
+        <typeAlias type="domain.User" alias="user"></typeAlias>
+    </typeAliases>
+
+
+    <!--&lt;!&ndash;分页助手&ndash;&gt;-->
+    <!--<plugins>-->
+        <!--&lt;!&ndash;分页助手&ndash;&gt;-->
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
+            <!--&lt;!&ndash;指定方言&ndash;&gt;-->
+            <!--<property name="dialect" value="mysql"></property>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+
+
+    <!--数据源环境-->
+    <environments default="developement">
+        <environment id="developement">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driverClassName}"></property>
+                <property name="url" value="${url}"></property>
+                <property name="username" value="${username}"></property>
+                <property name="password" value="${password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <!--加载映射文件 / 加载映射关系-->
+    <mappers>
+        <!--<mapper resource="mapper/UserMapper.xml"></mapper>-->
+        <package name="dao"></package>
+    </mappers>
+
+
+
+
+
+
+
+
+
+</configuration>

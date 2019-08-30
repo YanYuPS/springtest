@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                          ">
+
+    <import resource="jdbc.xml"></import>
+
+
+    <!--平台事务管理器-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--事务-->
+    <tx:advice id="interceptor" transaction-manager="dataSourceTransactionManager">
+        <!--针对各个业务方法，设置事务的属性信息-->
+        <tx:attributes>
+            <!--方法名、*、方法名*-->
+            <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED" timeout="-1" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--事务 配置织入-->
+    <aop:config>
+        <!--事务专用-->
+        <aop:advisor advice-ref="interceptor" pointcut="execution(* service.impl.*.*(..))"></aop:advisor>
+    </aop:config>
+
+    <tx:annotation-driven transaction-manager="dataSourceTransactionManager"></tx:annotation-driven>
+
+
+    <!--组件扫描-->
+    <context:component-scan base-package="service"/>
+
+</beans>
